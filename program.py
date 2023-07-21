@@ -6,10 +6,12 @@ import time
 
 start_time = time.time()
 
-path = "data.jsonl"
-def read_file(path: Any) -> dict[tuple[Any, Any], list]:
+_path = "data.jsonl"
+
+
+def read_file(_path: str) -> dict[tuple[Any, Any], list]:
     grouped_data = {}
-    with open(path, "r") as file:
+    with open(_path, "r") as file:
         for line in file:
             data = json.loads(line)
 
@@ -27,9 +29,9 @@ def read_file(path: Any) -> dict[tuple[Any, Any], list]:
     return grouped_data
 
 
-def group_file(new_set: {items}) -> list[dict[str, Any]]:
+def group_file(grouped_data: dict) -> list[dict[str, Any]]:
     data = []
-    for key, values in new_set.items():
+    for key, values in grouped_data.items():
         date, sensor = key
         median_value = median(values)
 
@@ -38,12 +40,12 @@ def group_file(new_set: {items}) -> list[dict[str, Any]]:
     return data
 
 
-def write_file(new_data: Any) -> None:
+def write_file(data: dict) -> None:
     with open("new_data.jsonl", "w") as file:
-        for record in new_data:
+        for record in data:
             file.write(json.dumps(record) + "\n")
 
 
-write_file(group_file(read_file(path)))
+write_file(group_file(read_file(_path)))
 
 print("time elapsed: {:.2f}s".format(time.time() - start_time))
